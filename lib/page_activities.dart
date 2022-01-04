@@ -37,6 +37,10 @@ class _PageActivitiesState extends State<PageActivities> {
                     icon: Icon(Icons.home),
                     onPressed: () {} // TODO go home page = root
                     ),
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {} // TODO search by tag
+                    ),
                 //TODO other actions
               ],
             ),
@@ -49,6 +53,13 @@ class _PageActivitiesState extends State<PageActivities> {
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),
             ),
+            floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+                onPressed: () => {}
+                //TODO ADD task or project
+                ),
           );
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
@@ -82,8 +93,19 @@ class _PageActivitiesState extends State<PageActivities> {
     // split by '.' and taking first element of resulting list removes the microseconds part
     if (activity is Project) {
       return ListTile(
-        title: Text('${activity.name}'),
         trailing: Text('$strDuration'),
+        title: RichText(
+          text: TextSpan(children: [
+            TextSpan(
+              text: 'Project:   ',
+              style: TextStyle(color: Colors.teal[300], fontSize: 23.0),
+            ),
+            TextSpan(
+              text: '${activity.name}',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
+          ]),
+        ),
         onTap: () => _navigateDownActivities(activity.id),
       );
     } else if (activity is Task) {
@@ -92,7 +114,20 @@ class _PageActivitiesState extends State<PageActivities> {
       Widget trailing;
       trailing = Text('$strDuration');
       return ListTile(
-        title: Text('${activity.name}'),
+        //title: Text('Task: ${activity.name}', style: TextStyle(fontSize: 50.0)),
+        title: RichText(
+          text: TextSpan(children: [
+            TextSpan(
+              text: 'Task:   ',
+              style: TextStyle(color: Colors.teal[300], fontSize: 23.0),
+            ),
+            TextSpan(
+              text: '${activity.name}',
+              style: TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
+          ]),
+        ),
+
         trailing: trailing,
         onTap: () => _navigateDownIntervals(activity.id),
         onLongPress: () {}, // TODO start/stop counting the time for tis task

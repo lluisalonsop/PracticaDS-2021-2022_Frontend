@@ -4,6 +4,7 @@ import 'package:time_tracker/requests.dart';
 
 class PageIntervals extends StatefulWidget {
   final int id; // final because StatefulWidget is immutable
+
   @override
   _PageIntervalsState createState() => _PageIntervalsState();
   PageIntervals(this.id);
@@ -11,6 +12,7 @@ class PageIntervals extends StatefulWidget {
 
 class _PageIntervalsState extends State<PageIntervals> {
   late int id;
+  late bool active = true;
   late Future<Tree.Tree> futureTree;
 
   @override
@@ -27,6 +29,10 @@ class _PageIntervalsState extends State<PageIntervals> {
       builder: (context, snapshot) {
         // anonymous function
         if (snapshot.hasData) {
+          if (snapshot.data!.root is Tree.Task) {
+            Tree.Task task = snapshot.data!.root as Tree.Task;
+            active = task.active;
+          }
           int numChildren = snapshot.data!.root.children.length;
           return Scaffold(
             appBar: AppBar(
@@ -46,6 +52,24 @@ class _PageIntervalsState extends State<PageIntervals> {
                   _buildRow(snapshot.data!.root.children[index], index),
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: active ? Icon(Icons.play_arrow) : Icon(Icons.pause),
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              onPressed: () => setState(() {
+                if (active) {
+                  start(snapshot.data!.root.id);
+                  Tree.Task task = snapshot.data!.root as Tree.Task;
+                  task.active = false;
+                  active = false;
+                } else {
+                  stop(snapshot.data!.root.id);
+                  Tree.Task task = snapshot.data!.root as Tree.Task;
+                  task.active = true;
+                  active = true;
+                }
+              }),
             ),
           );
         } else if (snapshot.hasError) {

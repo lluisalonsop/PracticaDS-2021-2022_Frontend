@@ -9,14 +9,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'App Title',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        /* light theme settings */
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        /* dark theme settings */
+      ),
+      themeMode: ThemeMode.dark,
+      /* ThemeMode.system to follow system theme, 
+         ThemeMode.light for light theme, 
+         ThemeMode.dark for dark theme
+      */
+      home: PageActivities(0),
+    );
+    /*
+    return MaterialApp(
       title: 'TimeTracker',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
+        backgroundColor: Colors.grey,
         textTheme: TextTheme(
             subtitle1: TextStyle(fontSize: 20.0),
             bodyText2: TextStyle(fontSize: 20.0)),
       ),
       home: PageActivities(0),
-    );
+    );*/
   }
 }
